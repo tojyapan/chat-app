@@ -25,6 +25,9 @@ type Message struct {
 }
 
 func main() {
+	port, _ := strconv.Atoi(os.Args[1])
+	fmt.Printf("Starting server at Port %d", port)
+
 	fs := http.FileServer(http.Dir("./public"))
 	http.Handle("/", fs)
 
@@ -32,14 +35,12 @@ func main() {
 
 	go handleMessages()
 
+	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 	// log.Println("http server started on :8000")
 	// err := http.ListenAndServe(":8000", nil)
-	port, _ := strconv.Atoi(os.Args[1])
-	fmt.Printf("Starting server at Port %d", port)
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	// if err != nil {
+	// 	log.Fatal("ListenAndServe: ", err)
+	// }
 }
 
 func handleConnections(w http.ResponseWriter, r *http.Request) {
